@@ -13,13 +13,13 @@ func MessageName(any interface{}) string {
 
 // application service
 type ProvisionApplicationRequest struct {
-	RequesterID                   string
-	ApplicationID                 string
-	TeamID                        string
-	ApplicationName               string // eg, medicationID - TODO support `line items`
-	AuthorizerID                  string
-	AuthorizationTimeoutSeconds   int64
-	DemoAuthorizationDelaySeconds int64
+	RequesterID                   string `json:"requesterId"`
+	ApplicationID                 string `json:"applicationId"`
+	TeamID                        string `json:"teamId"`
+	ApplicationName               string `json:"applicationName"` // eg, medicationID - TODO support `line items`
+	AuthorizerID                  string `json:"authorizerId"`
+	AuthorizationTimeoutSeconds   int64  `json:"authorizationTimeoutSeconds"`
+	DemoAuthorizationDelaySeconds int64  `json:"demoAuthorizationDelaySeconds"`
 }
 type PlaceOrderResponse struct {
 }

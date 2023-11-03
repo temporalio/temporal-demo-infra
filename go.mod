@@ -3,13 +3,19 @@ module github.com/temporalio/temporal-demo-infra
 go 1.21
 
 require (
+	github.com/go-chi/chi v1.5.5
+	github.com/go-chi/chi/v5 v5.0.10
+	github.com/go-chi/cors v1.2.1
+	github.com/gojek/heimdall/v7 v7.0.2
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/joho/godotenv v1.5.1
+	github.com/mrz1836/go-sanitize v1.3.1
 	github.com/prometheus/client_golang v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569
 	github.com/uber-go/tally/v4 v4.1.10
 	github.com/vrischmann/envconfig v1.3.0
+	github.com/yosida95/uritemplate v2.0.0+incompatible
 	go.temporal.io/api v1.25.0
 	go.temporal.io/sdk v1.25.1
 	go.temporal.io/sdk/contrib/tally v0.2.0
@@ -27,6 +33,7 @@ require (
 	github.com/gogo/googleapis v1.4.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gogo/status v1.1.1 // indirect
+	github.com/gojek/valkyrie v0.0.0-20180215180059-6aee720afcdf // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/uuid v1.3.1 // indirect
@@ -34,7 +41,6 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
-	github.com/mrz1836/go-sanitize v1.3.1 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

@@ -1,0 +1,35 @@
+<script>import CodeBlock from './code-block.svelte';
+export let Hst;
+</script>
+
+<Hst.Story>
+  <Hst.Variant title="A json code block">
+    <CodeBlock content={{ foo: 'bar', baz: false, blue: 42 }} />
+  </Hst.Variant>
+
+  <Hst.Variant title="An inline json code block">
+    <CodeBlock
+      content={[
+        '12345678',
+        '56781234',
+        '12345678',
+        '56781234',
+        '12345678',
+        '56781234',
+        '12345678',
+        '56781234',
+        '12345678',
+        '56781234',
+      ]}
+      inline
+    />
+  </Hst.Variant>
+
+  <Hst.Variant title="A text code block">
+    <CodeBlock
+      content={'tctl --namespace example namespace'}
+      language="text"
+      inline
+    />
+  </Hst.Variant>
+</Hst.Story>

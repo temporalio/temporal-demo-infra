@@ -29,6 +29,9 @@ func (h *Handlers) RequestApplicationAuthorization(ctx context.Context, cmd *mes
 		"teamId",
 		cmd.TeamID,
 	)
+	if cmd.DelaySeconds == 0 {
+		return nil
+	}
 	go (func(cmd *messages.RequestApplicationAuthorizationRequest) {
 		select {
 		case <-time.After(time.Duration(cmd.DelaySeconds) * time.Second):
