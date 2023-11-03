@@ -110,13 +110,17 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 	logger.Info("received provision request", "request", teamInfo)
 
 	// this is a fire and forget call, so we can block for the successful send of an API request
-	if err := workflow.ExecuteActivity(authorizationCtx, notifications.TypeHandlers.RequestApplicationAuthorization, &messages.RequestApplicationAuthorizationRequest{
-		AuthorizerID:  params.AuthorizerID,
-		TeamID:        params.TeamID,
-		CustomerID:    params.RequesterID,
-		DelaySeconds:  params.DemoFulfillmentDelaySeconds,
-		ApplicationID: params.ApplicationID,
-	}).Get(ctx, nil); err != nil {
+	if err := workflow.ExecuteActivity(
+		authorizationCtx,
+		notifications.TypeHandlers.RequestApplicationAuthorization,
+		&messages.RequestApplicationAuthorizationRequest{
+			AuthorizerID:  params.AuthorizerID,
+			TeamID:        params.TeamID,
+			CustomerID:    params.RequesterID,
+			DelaySeconds:  params.DemoFulfillmentDelaySeconds,
+			ApplicationID: params.ApplicationID,
+		},
+	).Get(ctx, nil); err != nil {
 		return fmt.Errorf("failed to send authorization request %w", err)
 	}
 
@@ -137,14 +141,18 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 	if state.Authorization != nil {
 
 		// this is a fire and forget call, so we can block for the successful send of an API request
-		if err := workflow.ExecuteActivity(provisionCtx, provider_aws.TypeHandlers.ProvisionFoundationResources, &messages.ProvisionFoundationResourcesRequest{
-			ApplicationID:   params.ApplicationID,
-			TeamID:          params.TeamID,
-			Region:          state.Authorization.Region,
-			RoleAdminArn:    state.Authorization.RoleAdminArn,
-			ApplicationName: params.ApplicationName,
-			DelaySeconds:    params.DemoFulfillmentDelaySeconds,
-		}).Get(ctx, nil); err != nil {
+		if err := workflow.ExecuteActivity(
+			provisionCtx,
+			provider_aws.TypeHandlers.ProvisionFoundationResources,
+			&messages.ProvisionFoundationResourcesRequest{
+				ApplicationID:   params.ApplicationID,
+				TeamID:          params.TeamID,
+				Region:          state.Authorization.Region,
+				RoleAdminArn:    state.Authorization.RoleAdminArn,
+				ApplicationName: params.ApplicationName,
+				DelaySeconds:    params.DemoFulfillmentDelaySeconds,
+			},
+		).Get(ctx, nil); err != nil {
 			return fmt.Errorf("failed to provision %w", err)
 		}
 	} else if temporal.IsCanceledError(err) {

@@ -1,0 +1,5 @@
+config:
+  aws:profile: iac
+  aws:region: us-east-1
+  website:applicationId: foo
+  website:bucketName: foo-3
