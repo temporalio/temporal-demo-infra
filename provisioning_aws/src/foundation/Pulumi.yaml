@@ -1,0 +1,7 @@
+name: foundation
+runtime: nodejs
+description: A Pulumi AWS TS program that deploys a static foundation.
+config:
+  pulumi:disable-default-providers:
+    value:
+      - aws

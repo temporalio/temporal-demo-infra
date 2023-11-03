@@ -11,16 +11,23 @@ let provider = new aws.Provider(region, {
     region: region as aws.Region,
     profile: awsProfile,
 })
-
 const applicationId = cfg.require('applicationId')
+const bucketName = cfg.require('bucketName')
+const applicationName = cfg.require('applicationName')
+
+if(!provider) {
+    throw new Error('provider is required')
+}
 
 // Create an AWS resource (S3 Bucket)
-const bucket = new aws.s3.Bucket(applicationId,{},{provider});
+const bucket = new aws.s3.Bucket(applicationId,{
+    bucket: bucketName,
+},{provider});
 
 const indexContent = `<html><head>
 <title>Hello S3</title><meta charset="UTF-8">
 </head>
-<body><p>Hello, ${applicationId}!</p><p>Made with ❤️ with <a href="https://pulumi.com">Pulumi</a></p>
+<body><p>Hello, ${applicationName}!</p><p>Made with ❤️ with <a href="https://pulumi.com">Pulumi</a></p>
 </body></html>
 `
 

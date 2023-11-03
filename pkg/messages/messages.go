@@ -13,16 +13,13 @@ func MessageName(any interface{}) string {
 
 // application service
 type ProvisionApplicationRequest struct {
-	RequesterID                       string
-	ApplicationID                     string
-	TeamID                            string
-	ApplicationName                   string // eg, medicationID - TODO support `line items`
-	AuthorizerID                      string
-	AuthorizationTimeoutSeconds       int64
-	DemoAuthorizationDelaySeconds     int64
-	DemoFulfillmentDelaySeconds       int64
-	DemoValidateInsuranceDelaySeconds int64
-	ChangeOrder                       *ChangeOrderRequest
+	RequesterID                   string
+	ApplicationID                 string
+	TeamID                        string
+	ApplicationName               string // eg, medicationID - TODO support `line items`
+	AuthorizerID                  string
+	AuthorizationTimeoutSeconds   int64
+	DemoAuthorizationDelaySeconds int64
 }
 type PlaceOrderResponse struct {
 }
@@ -56,12 +53,12 @@ type ChangeOrderRequest struct {
 	PrescriptionID string
 }
 type ProvisionFoundationResourcesRequest struct {
-	ApplicationID   string
-	Region          string
-	RoleAdminArn    string
-	TeamID          string
-	ApplicationName string
-	DelaySeconds    int64
+	ApplicationID   string `json:"applicationId"`
+	Region          string `json:"region"`
+	Profile         string `json:"profile"`
+	TeamID          string `json:"teamId"`
+	ApplicationName string `json:"applicationName"`
+	BucketName      string `json:"bucketName"`
 }
 type PauseOrderRequest struct {
 	OrderID         string
@@ -80,11 +77,11 @@ type ValidateInsuranceRequest struct {
 /*events*/
 
 type AuthorizationReceivedResponse struct {
-	ApplicationID string
-	Region        string
-	RoleAdminArn  string
-	TeamID        string
-	IsApproved    bool
+	ApplicationID string `json:"applicationId"`
+	Region        string `json:"region"`
+	Profile       string `json:"profile"`
+	TeamID        string `json:"teamId"`
+	IsApproved    bool   `json:"isApproved"`
 }
 
 type OrderChangedResponse struct {
@@ -93,8 +90,10 @@ type OrderChangedResponse struct {
 	PrescriptionID string
 }
 type ProvisionFoundationResourcesResponse struct {
-	ApplicationID      string
-	CompletionDateTime string
+	ApplicationID      string   `json:"applicationId"`
+	Summary            []string `json:"summary"`
+	CompletionDateTime string   `json:"completionDateTime"`
+	Region             string   `json:"region""`
 }
 type ValidateInsuranceResponse struct {
 	OrderID    string

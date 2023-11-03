@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/temporalio/temporal-demo-infra/internal/notifications"
 	"github.com/temporalio/temporal-demo-infra/internal/orchestrations"
-	"github.com/temporalio/temporal-demo-infra/internal/provider_aws"
 	"github.com/temporalio/temporal-demo-infra/internal/teams"
 	temporalClient "github.com/temporalio/temporal-demo-infra/pkg/clients/temporal"
 	"time"
@@ -17,7 +16,7 @@ import (
 	"go.temporal.io/sdk/worker"
 )
 
-const TaskQueueOrders = "orders"
+const TaskQueueApps = "apps"
 
 type Option func(w *Worker)
 
@@ -33,7 +32,7 @@ func WithConfig(cfg *Config) Option {
 }
 
 type Config struct {
-	TaskQueueOrders string
+	TaskQueueApps string
 }
 
 func (c *Config) Prefix() string {
@@ -50,7 +49,7 @@ type Worker struct {
 
 func NewWorker(_ context.Context, opts ...Option) (*Worker, error) {
 	w := &Worker{}
-	defaultOpts := []Option{WithConfig(&Config{TaskQueueOrders: TaskQueueOrders})}
+	defaultOpts := []Option{WithConfig(&Config{TaskQueueApps: TaskQueueApps})}
 	opts = append(defaultOpts, opts...)
 	for _, o := range opts {
 		o(w)
@@ -67,23 +66,20 @@ func (w *Worker) register(inner worker.Worker) error {
 	wfs := &orchestrations.Orchestrations{}
 
 	// register activities
-	orderHandlers := teams.NewHandlers()
+	teamsHandlers := teams.NewHandlers()
 	notificationsHandlers := notifications.NewHandlers(w.temporalClients.Client)
-	dispensingHandlers := provider_aws.NewHandlers(w.temporalClients.Client)
 
-	inner.RegisterActivity(orderHandlers)
+	inner.RegisterActivity(teamsHandlers)
 	inner.RegisterActivity(notificationsHandlers)
-	inner.RegisterActivity(dispensingHandlers)
 
 	// register workflows
 	inner.RegisterWorkflow(wfs.ProvisionApplication)
-	inner.RegisterWorkflow(wfs.NaivePlaceOrder)
 	return nil
 }
 func (w *Worker) Start(ctx context.Context) error {
 	logger := log.GetLogger(ctx)
 
-	inner := worker.New(w.temporalClients.Client, w.cfg.TaskQueueOrders, worker.Options{})
+	inner := worker.New(w.temporalClients.Client, w.cfg.TaskQueueApps, worker.Options{})
 
 	if err := w.register(inner); err != nil {
 		return fmt.Errorf("failed to register workflows/activities: %w", err)

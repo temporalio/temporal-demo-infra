@@ -65,7 +65,7 @@ func main() {
 }
 
 type Config struct {
-	TaskQueueOrders string
+	TaskQueueApps string
 }
 
 func (c *Config) Prefix() string {

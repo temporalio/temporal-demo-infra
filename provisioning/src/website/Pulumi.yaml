@@ -1,7 +1,0 @@
-name: website
-runtime: nodejs
-description: A Pulumi AWS TS program that deploys a static website.
-config:
-  pulumi:disable-default-providers:
-    value:
-      - aws

@@ -23,10 +23,10 @@ func NewHandlers(temporalClient sdkclient.Client) *Handlers {
 func (h *Handlers) RequestApplicationAuthorization(ctx context.Context, cmd *messages.RequestApplicationAuthorizationRequest) error {
 	logger := activity.GetLogger(ctx)
 	logger.Info(
-		"authorizing prescription",
-		"orderId",
+		"authorizing application",
+		"applicationId",
 		cmd.ApplicationID,
-		"prescriptionId",
+		"teamId",
 		cmd.TeamID,
 	)
 	go (func(cmd *messages.RequestApplicationAuthorizationRequest) {
@@ -34,8 +34,9 @@ func (h *Handlers) RequestApplicationAuthorization(ctx context.Context, cmd *mes
 		case <-time.After(time.Duration(cmd.DelaySeconds) * time.Second):
 			event := &messages.AuthorizationReceivedResponse{
 				ApplicationID: cmd.ApplicationID,
-				Region:        cmd.TeamID,
-				TeamID:        cmd.CustomerID,
+				Region:        "us-east-1",
+				Profile:       "iac",
+				TeamID:        cmd.TeamID,
 				IsApproved:    true,
 			}
 			if err := h.temporalClient.SignalWorkflow(context.Background(), cmd.ApplicationID, "", messages.MessageName(event), event); err != nil {
