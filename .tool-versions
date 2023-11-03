@@ -1,0 +1,6 @@
+awscli 2.7.6
+kubectl 1.22.10
+kustomize 4.5.5
+golang 1.21.0
+golangci-lint 1.52.2
+
