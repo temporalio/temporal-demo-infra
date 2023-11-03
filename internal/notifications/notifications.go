@@ -29,6 +29,7 @@ func (h *Handlers) RequestApplicationAuthorization(ctx context.Context, cmd *mes
 		"teamId",
 		cmd.TeamID,
 	)
+
 	if cmd.DelaySeconds == 0 {
 		return nil
 	}

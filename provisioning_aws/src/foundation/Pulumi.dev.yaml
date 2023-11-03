@@ -1,6 +1,6 @@
 config:
   aws:profile: iac
   aws:region: us-east-1
-  foundation:applicationId: 1oAYSpVIg
-  foundation:applicationName: ThisWorks
-  foundation:bucketName: app-thisworks
+  foundation:applicationId: luke-bkilkt4ig
+  foundation:applicationName: luke
+  foundation:bucketName: app-luke-skywalker-lukebkilkt4ig

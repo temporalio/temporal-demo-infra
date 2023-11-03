@@ -61,6 +61,29 @@
         }
 
     }
+    const _rejectApp = async () => {
+        console.log('authorizing', submitted)
+        const res = await fetch('http://localhost:8042/api/provision', {
+            method: 'DELETE',
+            body: JSON.stringify({
+                region: region,
+                profile: profile,
+                workflowId: submitted?.workflowId,
+                applicationId: submitted?.applicationId,
+            }),
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+
+        if(res.ok) {
+            console.log('success',res.status)
+        } else {
+            console.error(res.status)
+        }
+
+    }
+
 </script>
 
 <div class="min-h-screen bg-primary text-offWhite flex flex-col text-xl items-center justify-center">
@@ -108,7 +131,7 @@
 
 
             <Button class="self-center border-spaceGray" variant="secondary" on:click={ _authorizeApp }>APPROVE</Button>
-            <Button class="self-center border-spaceGray" variant="secondary" on:click={ _authorizeApp }>REJECT</Button>
+            <Button class="self-center border-spaceGray" variant="secondary" on:click={ _rejectApp }>REJECT</Button>
             { #if message }
                 <p class="error message">{ message }</p>
             { /if }

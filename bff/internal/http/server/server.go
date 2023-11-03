@@ -117,6 +117,7 @@ func (s *Server) buildApiRouter(r chi.Router) chi.Router {
 	}
 	r.Post("/provision", provisionHandlers.POST)
 	r.Patch("/provision", provisionHandlers.PATCH)
+	r.Delete("/provision", provisionHandlers.DELETE)
 	return r
 }
 

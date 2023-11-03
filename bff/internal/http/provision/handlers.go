@@ -2,6 +2,7 @@ package provision
 
 import (
 	"fmt"
+	"github.com/mrz1836/go-sanitize"
 	"github.com/temporalio/temporal-demo-infra/bff/internal/clients/temporal"
 	"github.com/temporalio/temporal-demo-infra/bff/internal/http/encoding"
 	"github.com/temporalio/temporal-demo-infra/bff/pkg/instrumentation/log"
@@ -10,6 +11,7 @@ import (
 	"github.com/teris-io/shortid"
 	"go.temporal.io/sdk/client"
 	"net/http"
+	"strings"
 )
 
 type Handlers struct {
@@ -30,14 +32,14 @@ func NewHandlers(opts ...Option) (*Handlers, error) {
 func (h *Handlers) POST(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	workflowID := shortid.MustGenerate()
-	logger := log.WithFields(log.GetLogger(ctx), log.Fields{"workflow_id": workflowID})
+	logger := log.GetLogger(ctx)
 	u := &ProvisionPOST{}
 	if err := encoding.DecodeJSONBody(w, r, u); err != nil {
 		logger.Error("failed to authenticate", log.Fields{log.TagError: err})
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	workflowID := strings.ToLower(fmt.Sprintf("%s-%s", sanitize.AlphaNumeric(u.ApplicationName, false), shortid.MustGenerate()))
 
 	params := &messages.ProvisionApplicationRequest{
 		ApplicationID:                 workflowID,
@@ -94,6 +96,30 @@ func (h *Handlers) PATCH(w http.ResponseWriter, r *http.Request) {
 		IsApproved:    true,
 	}
 	logger.Info("approving scenario")
+	err := h.temporal.Client.SignalWorkflow(ctx, u.WorkflowID, "", messages.MessageName(event), event)
+	if err != nil {
+		logger.Error("error signaling", log.Fields{"err": err})
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	w.WriteHeader(http.StatusAccepted)
+}
+func (h *Handlers) DELETE(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	logger := log.GetLogger(ctx)
+	u := &ProvisionPATCH{}
+	if err := encoding.DecodeJSONBody(w, r, u); err != nil {
+		logger.Error("failed to signal", log.Fields{log.TagError: err})
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	event := &messages.AuthorizationReceivedResponse{
+		ApplicationID: u.ApplicationID,
+		Region:        u.Region,
+		Profile:       u.Profile,
+		TeamID:        u.TeamID,
+		IsApproved:    false,
+	}
+	logger.Info("rejecting scenario")
 	err := h.temporal.Client.SignalWorkflow(ctx, u.WorkflowID, "", messages.MessageName(event), event)
 	if err != nil {
 		logger.Error("error signaling", log.Fields{"err": err})

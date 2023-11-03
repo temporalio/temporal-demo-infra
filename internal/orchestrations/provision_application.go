@@ -47,8 +47,7 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 	}
 	ctx = workflow.WithActivityOptions(ctx, workflow.ActivityOptions{
 		// activities should be completed within this time
-		StartToCloseTimeout: time.Second * 120,
-		HeartbeatTimeout:    time.Second * 3,
+		StartToCloseTimeout: time.Second * 3,
 	})
 	logger := log.With(
 		workflow.GetLogger(ctx),
@@ -143,14 +142,14 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 	logger.Info("waiting for authorization and fulfillment to complete")
 	_, err := workflow.AwaitWithTimeout(ctx, time.Second*time.Duration(params.AuthorizationTimeoutSeconds), func() bool {
 		// allow time for approval to be changed so only block while not approved
-		return state.Authorization != nil && state.Authorization.IsApproved
+		return state.Authorization != nil
 	})
 
 	state.AuthorizationTimedOut = temporal.IsCanceledError(err)
 	logger.Info("done waiting", state.ToKVP()...)
 	if state.Authorization == nil || !state.Authorization.IsApproved {
 		// no soup for you
-		return nil, fmt.Errorf("application %s is not approved", params.ApplicationName)
+		return nil, fmt.Errorf("application '%s' is not approved", params.ApplicationName)
 	}
 
 	if state.Authorization != nil {
@@ -164,7 +163,12 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 				Region:          state.Authorization.Region,
 				Profile:         state.Authorization.Profile,
 				ApplicationName: params.ApplicationName,
-				BucketName:      fmt.Sprintf("app-%s", strings.ToLower(sanitize.AlphaNumeric(params.ApplicationName, false))),
+				BucketName: fmt.Sprintf(
+					"app-%s-%s-%s",
+					strings.ToLower(sanitize.AlphaNumeric(params.ApplicationName, false)),
+					strings.ToLower(sanitize.AlphaNumeric(params.TeamID, false)),
+					strings.ToLower(sanitize.AlphaNumeric(params.ApplicationID, false)),
+				),
 			},
 		).Get(ctx, &state.Resources); err != nil {
 			return nil, fmt.Errorf("failed to provision %w", err)
