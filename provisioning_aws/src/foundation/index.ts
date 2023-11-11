@@ -21,13 +21,13 @@ if(!provider) {
 
 // Create an AWS resource (S3 Bucket)
 // BUG: We are missing the provider usage here
-const bucket = new aws.s3.Bucket(applicationId,{
-    bucket: bucketName,
-});
-// corrected:
 // const bucket = new aws.s3.Bucket(applicationId,{
 //     bucket: bucketName,
-// },{provider});
+// });
+// corrected:
+const bucket = new aws.s3.Bucket(applicationId,{
+    bucket: bucketName,
+},{provider});
 
 const indexContent = `<html><head>
 <title>Hello S3</title><meta charset="UTF-8">

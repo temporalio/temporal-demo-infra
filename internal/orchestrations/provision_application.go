@@ -64,6 +64,9 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 	var teamInfo *messages.GetTeamInformationResponse
 
 	state := &ProvisionApplicationState{}
+	workflow.SetQueryHandler(ctx, "GetState", func() (*ProvisionApplicationState, error) {
+		return state, nil
+	})
 
 	authorizationCtx, _ := workflow.WithCancel(ctx)
 	provisionCtx, _ := workflow.WithCancel(workflow.WithActivityOptions(ctx, workflow.ActivityOptions{
