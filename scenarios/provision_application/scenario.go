@@ -36,12 +36,6 @@ func performScenario(ctx context.Context, cfg *appConfig, clients *clients.Clien
 	if err != nil {
 		return err
 	}
-	//wait(3)
-	//logger.Info("changing ")
-	//changeOrder := &messages.ChangeOrderRequest{OrderID: workflowID, PrescriptionID: shortid.MustGenerate(), Reason: "different prescription"}
-	//if err = temporalClient.SignalWorkflow(ctx, workflowID, "", messages.MessageName(changeOrder), changeOrder); err != nil {
-	//	return err
-	//}
 
 	logger.Info("waiting for completion of app")
 	// block for completion of order
