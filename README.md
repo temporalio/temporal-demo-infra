@@ -19,53 +19,18 @@ the need for an orchestrator that can ensure your infrastructure remains in a co
 This demo presumes local ability to create and manage AWS Resources. Also, it writes changes
 to the Pulumi stack configuration in-place. Neither of these are admittedly "production grade" approaches.
 
-<div style="float: left; width: 33%;padding: 0; margin:0;">
-
-### Prerequisites
-| Prerequisite       | ✅ |
-|:-------------------|---|
-| Network Connection | ✅  |
-| Golang 1.18+       | ✅ |
-| NodeJS & NPM       |  ✅ |
-| Temporal CLI       |  ✅ |
-| Pulumi             |  ✅ |
-| AWS Account        |  ✅ |
-
-</div>
-
-<div style="float: left; width: 33%;padding: 0; margin:0;">
-
-### Features
-| Feature        | ✅ | 
-|----------------|-|
-| Schedule       | |
-| Local Activity | |
-| Signal         | ✅ |
-| Query          | ✅ |
-| Update         | |
-| Heartbeat      | ✅|
-| Timer          | ✅ |
-| Activity Retry | ✅ |
-| Cron           | |   
-| Data Converter | |
-| Polyglot       | ✅|
-
-</div>
-<div style="float: left; width: 33%;padding: 0; margin:0;">
-
-### Patterns
-| Pattern             | ✅ |
-|---------------------|---|
-| Entity              |   |
-| Fanout              |   |
-| Long-polling        |   |
-| Continue As New     |   |
-| Long-running        | ✅ |
-| Manual Intervention | ✅ |
-| Saga                |   |
-
-</div>
-<div style="clear: both;"></div>
+| Prerequisites      |   | __ | Features       |   | __ | Patterns            |   | 
+|:-------------------|---|----|----------------|---|----|---------------------|---|
+| Network Connection | ✅ | __  | Schedule       |   | __ | Entity              |   |
+| Golang 1.18+       | ✅ | __ | Local Activity |   | __ | Long-Running        | ✅ |
+| NodeJS & NPM       | ✅ | __ | Timer          | ✅ | __ | Fanout              |   |
+| Temporal CLI       | ✅ | __ | Signal         | ✅ | __ | Continue As New     |   |
+| Pulumi             | ✅ | __ | Query          | ✅ | __ | Manual Intervention | ✅ |
+| AWS Account        | ✅ | __ | Update         |   | __ | Saga                |   |
+|                    | ✅ | __ | Heartbeat      | ✅ | __ | Long-polling        |   |
+|                    |   | __ | Retry          | ✅ | __ |                     |   |
+|                    |   | __ | Data Converter |   | __ |                     |   |
+|                    |   | __ | Polyglot       | ✅ | __ |                     |   |
 
 ## Temporal Value Proposition Highlights
 
@@ -96,7 +61,7 @@ The use of `AwaitWithTimeout` makes it simple to wait for Human interaction whil
 on their response. There is no more need to continually query persistence for these kinds of 
 time limits to invalidate requests correctly.
 
-## Visibility
+## Insight
 
 **Show Me Why It Broke**
 
