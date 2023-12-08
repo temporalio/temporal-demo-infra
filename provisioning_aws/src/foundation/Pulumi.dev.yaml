@@ -1,6 +1,6 @@
 config:
   aws:profile: iac
   aws:region: us-east-1
-  foundation:applicationId: humanresources-tcru8tvsg
-  foundation:applicationName: humanresources
-  foundation:bucketName: app-humanresources-43-humanresourcestcru8tvsg
+  foundation:applicationId: yowzers-qhmoh4dig
+  foundation:applicationName: donkey
+  foundation:bucketName: app-donkey-123-donkeyes3z24dsg

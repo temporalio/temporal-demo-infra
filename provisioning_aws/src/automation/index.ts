@@ -1,8 +1,6 @@
 import { LocalProgramArgs, LocalWorkspace } from "@pulumi/pulumi/automation";
 import * as upath from "upath";
 import {Context} from "@temporalio/activity";
-import {provider} from "@pulumi/pulumi";
-// import { setInterval } from 'timers/promises';
 
 const args = process.argv.slice(2);
 let destroy = false;
@@ -39,6 +37,7 @@ export const provisionFoundationResources = async (cmd: ProvisionFoundationResou
             }
         }
     }
+    // heartbeat frequently to let Temporal know activity is still working
     heartbeat()
     if(!cmd.region || !cmd.profile) {
         throw new Error('region and profile is required')

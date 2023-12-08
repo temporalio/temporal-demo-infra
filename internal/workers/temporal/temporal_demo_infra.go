@@ -32,7 +32,8 @@ func WithConfig(cfg *Config) Option {
 }
 
 type Config struct {
-	TaskQueueApps string
+	TaskQueueApps            string
+	TaskQueueProvisioningAws string
 }
 
 func (c *Config) Prefix() string {
@@ -63,7 +64,13 @@ func (w *Worker) Shutdown(_ context.Context) {
 // register wires up dependencies and registers activities and/or workflows onto underlying worker
 func (w *Worker) register(inner worker.Worker) error {
 
-	wfs := &orchestrations.Orchestrations{}
+	wfs := &orchestrations.Orchestrations{
+		AWSProvisionerInfo: orchestrations.CloudProvisionerInfo{
+			TaskQueue:         w.cfg.TaskQueueProvisioningAws,
+			ProvisionActivity: "provisionFoundationResources",
+			DestroyActivity:   "destroyFoundationResources",
+		},
+	}
 
 	// register activities
 	teamsHandlers := teams.NewHandlers()

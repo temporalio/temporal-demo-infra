@@ -20,12 +20,6 @@ type CloudProvisionerInfo struct {
 	DestroyActivity   string
 }
 
-var AWSProvisioner = CloudProvisionerInfo{
-	TaskQueue:         "provisioning_aws",
-	ProvisionActivity: "provisionFoundationResources",
-	DestroyActivity:   "destroyFoundationResources",
-}
-
 type ProvisionApplicationState struct {
 	AuthorizationTimedOut bool
 	Authorization         *messages.AuthorizationReceivedResponse
@@ -75,7 +69,7 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 		// ping Temporal every 10 seconds that we are still working
 		HeartbeatTimeout: time.Second * 10,
 		// special sauce for targeting polyglot
-		TaskQueue: AWSProvisioner.TaskQueue,
+		TaskQueue: o.AWSProvisionerInfo.TaskQueue,
 	}))
 	defer (func() {
 		if !errors.Is(ctx.Err(), workflow.ErrCanceled) {
@@ -87,7 +81,7 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 		}
 		// When the Workflow is canceled, it has to get a new disconnected context to execute any Activities
 		newCtx, _ := workflow.NewDisconnectedContext(ctx)
-		err := workflow.ExecuteActivity(newCtx, "destroyResources", state.Resources).Get(ctx, nil)
+		err := workflow.ExecuteActivity(newCtx, o.AWSProvisionerInfo.DestroyActivity, state.Resources).Get(ctx, nil)
 		if err != nil {
 			logger.Error("CleanupActivity failed", "Error", err)
 		}
@@ -159,7 +153,7 @@ func (o *Orchestrations) ProvisionApplication(ctx workflow.Context, params *mess
 		// this is a fire and forget call, so we can block for the successful send of an API request
 		if err := workflow.ExecuteActivity(
 			provisionCtx,
-			AWSProvisioner.ProvisionActivity,
+			o.AWSProvisionerInfo.ProvisionActivity,
 			&messages.ProvisionFoundationResourcesRequest{
 				ApplicationID:   params.ApplicationID,
 				TeamID:          params.TeamID,

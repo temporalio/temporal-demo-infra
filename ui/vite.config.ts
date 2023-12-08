@@ -7,7 +7,7 @@ import mkcert from 'vite-plugin-mkcert'
 /** @type {import('vite').UserConfig} */
 const config: UserConfig = {
 	base: '/viteconfignotused',
-	plugins: [mkcert(),  sveltekit()],
+	plugins: [sveltekit()],
 	resolve: {
 		alias: {
 			$lib: path.resolve(__dirname, './src/lib'),
