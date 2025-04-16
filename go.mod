@@ -1,6 +1,7 @@
 module github.com/temporalio/temporal-demo-infra
 
 go 1.21
+toolchain go1.24.1
 
 require (
 	github.com/go-chi/chi v1.5.5
@@ -20,7 +21,7 @@ require (
 	go.temporal.io/sdk v1.25.1
 	go.temporal.io/sdk/contrib/tally v0.2.0
 	go.uber.org/zap v1.26.0
-	golang.org/x/sync v0.4.0
+	golang.org/x/sync v0.12.0
 	logur.dev/adapter/zap v0.5.0
 	logur.dev/logur v0.17.0
 )
@@ -52,9 +53,9 @@ require (
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20231016165738-49dd2c1f3d0b // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231016165738-49dd2c1f3d0b // indirect
