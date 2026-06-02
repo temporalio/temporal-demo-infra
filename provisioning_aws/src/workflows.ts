@@ -1,4 +1,4 @@
-import { proxyActivities, isCancellation, ActivityCancellationType, log } from '@temporalio/workflow';
+import {proxyActivities, isCancellation, ActivityCancellationType, log, setHandler} from '@temporalio/workflow';
 import type * as activities from './activities';
 import {ProvisionFoundationResourcesResponse} from "./activities";
 
@@ -28,5 +28,22 @@ export async function runCancellableActivity(): Promise<ProvisionFoundationResou
       // To clean up use CancellationScope.nonCancellable
     }
     throw err;
+  }
+}
+
+async function charge(obj:any, amount: any) { return undefined}
+async function sleep(obj: any) { return undefined}
+async function sendEmail(obj: any, val: string) { return undefined}
+
+export async function subscription(user, amount) {
+  let canceled = false
+  // @ts-ignore
+  setHandler('cancel', async () => {
+    canceled = true
+    await sendEmail(user, 'your subscription has been canceled')
+  })
+  while (!canceled) {
+    await charge(user, amount)
+    await sleep('30 days')
   }
 }
